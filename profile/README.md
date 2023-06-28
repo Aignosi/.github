@@ -3,20 +3,18 @@
 </div>
 
 ### 👋 Hi there, we are
-# **aignosis**
+# **[aignosi](https://www.aignosi.com/)**
 
-![Github](https://img.shields.io/github/followers/edumagol?style=social) 
+![Github](https://img.shields.io/github/followers/Aignosi?style=social) 
 [![dev.to badge](https://img.shields.io/badge/-Edu%20Magalhaes-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/eduardomoliveira/) 
 [![dev.to badge](https://img.shields.io/badge/-Twitter-blue?style=flat&logo=twitter)](https://twitter.com/Aignosi)mm
 [![dev.to badge](https://img.shields.io/badge/-%20Kaggle-blue?style=flat)](https://www.kaggle.com/edumagalhaes)    
 
-- ⚡ We are an AI startup focused on building AI that can optimize factories [aignosi](https://www.aignosi.com/), where we developed our Data & AI Platform, called SIENTIA™.
+- ⚡ We are an AI startup focused on building AI that can optimize factories, where we developed our Data & AI Platform, called SIENTIA™.
 
-- ⚡ My last job was at [ihm stefanini](https://www.ihm.com.br/) as the Head of Data Science, where we applied AI to optimize factories. My role was 50% technical and 50% managerial.
+- ❤️ Our passion and areas of expertise are Data engineering, Generative AI, Process Control and Optimization, Causality and Deep Learning.
 
-- ❤️ My passion and areas of expertise are Process Control and Optimization, Causality, Deep Learning.
-
-- 🌟 I've helped our team in the development of Data products end-end (Desgin Thinking, Algorithms, Data Engineering, Backend and Frontend, Decision Making process and Chance Management).
+- 🌟 We've helped our team in the development of Data products end-end (Desgin Thinking, Algorithms, Data Engineering, Backend and Frontend, Decision Making process and Chance Management).
  
 - ✍️ In my free time I'm a musician.
 
