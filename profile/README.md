@@ -2,13 +2,12 @@
   <img src="https://media.giphy.com/media/ZeFG00TVXs54Pw4c8e/giphy.gif" width="300"/>
 </div>
 
-### 👋 Hi there, we are
-# **[aignosi](https://www.aignosi.com/)**
+### 👋 Hi there, we are **[aignosi](https://www.aignosi.com/)**
 
 ![Github](https://img.shields.io/github/followers/Aignosi?style=social) 
-[![dev.to badge](https://img.shields.io/badge/-Edu%20Magalhaes-blue?style=flat&logo=linkedin)](https://www.linkedin.com/company/aignosi/) 
+[![dev.to badge](https://img.shields.io/badge/-aignosi-blue?style=flat&logo=linkedin)](https://www.linkedin.com/company/aignosi/) 
 [![dev.to badge](https://img.shields.io/badge/-Twitter-blue?style=flat&logo=twitter)](https://twitter.com/Aignosi)mm
-[![dev.to badge](https://img.shields.io/badge/-%20Kaggle-blue?style=flat)](https://www.kaggle.com/edumagalhaes)    
+   
 
 - ⚡ We are an AI startup focused on building AI that can optimize factories, where we developed our Data & AI Platform, called SIENTIA™.
 
