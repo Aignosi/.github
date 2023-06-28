@@ -6,7 +6,7 @@
 # **[aignosi](https://www.aignosi.com/)**
 
 ![Github](https://img.shields.io/github/followers/Aignosi?style=social) 
-[![dev.to badge](https://img.shields.io/badge/-Edu%20Magalhaes-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/eduardomoliveira/) 
+[![dev.to badge](https://img.shields.io/badge/-Edu%20Magalhaes-blue?style=flat&logo=linkedin)](https://www.linkedin.com/company/aignosi/) 
 [![dev.to badge](https://img.shields.io/badge/-Twitter-blue?style=flat&logo=twitter)](https://twitter.com/Aignosi)mm
 [![dev.to badge](https://img.shields.io/badge/-%20Kaggle-blue?style=flat)](https://www.kaggle.com/edumagalhaes)    
 
