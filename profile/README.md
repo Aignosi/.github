@@ -13,15 +13,15 @@
 
 - ❤️ Our passion and areas of expertise are Data engineering, Generative AI, Process Control and Optimization, Causality and Deep Learning.
 
-- 🌟 We've helped our team in the development of Data products end-end (Desgin Thinking, Algorithms, Data Engineering, Backend and Frontend, Decision Making process and Chance Management).
+- 🌟 We've helped our clients in the development of Data products end-end (Desgin Thinking, Algorithms, Data Engineering, Backend and Frontend, Decision Making process and Chance Management).
  
-- ✍️ In my free time we like to share our knowledge to people that have lees privilegies in our world.
+- ✍️ In our free time we like to share our knowledge to people that have less privilegies in our world.
 
 - 🔭 We are currently researching the connection between Generative AI, Causality and Process Control Engineering.
 
 
 Some of our technical work:
-- Our Research Gate where you can find some technical work: https://www.researchgate.net/profile/Eduardo-Oliveira-17
+- Our [Research Gate profile](https://www.researchgate.net/profile/Eduardo-Oliveira-17) where you can find technical work
 
 ---
 
