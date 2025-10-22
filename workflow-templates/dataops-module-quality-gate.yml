@@ -1,0 +1,176 @@
+name: DataOps Module Quality Gate
+
+on:
+  workflow_call:
+    inputs:
+      project_name:
+        required: true
+        type: string
+        description: 'Name of the project/module to analyze (e.g., ingestor, processor, etc.)'
+      python_version:
+        required: false
+        type: string
+        default: '3.11'
+        description: 'Python version to use for the analysis'
+      app_owner:
+        required: false
+        type: string
+        default: 'Aignosi'
+        description: 'GitHub App owner for authentication'
+      repositories:
+        required: false
+        type: string
+        default: 'sientia-dataops-library,sientia-mlops-library'
+        description: 'Comma-separated list of repositories for GitHub App access'
+
+jobs:
+  sonar:
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: ⬇️ Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate App Token
+        id: generate-app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: '${{ inputs.app_owner }}'
+          repositories: '${{ inputs.repositories }}'
+
+      - name: Prepare requirements.txt
+        id: prepare-requirements
+        run: |
+          sed -e "s|git+ssh://git@github.com/|git+https://github.com/|g" \
+              -e "s|git@github.com:|git+https://github.com/|g" \
+              requirements.txt > requirements_prepared.txt
+          echo "PROCESSED_REQUIREMENTS_FILE=requirements_prepared.txt" >> $GITHUB_OUTPUT
+
+      - name: Configure Git to use App Token
+        env:
+          GH_APP_TOKEN: ${{ steps.generate-app-token.outputs.token }}
+        run: |
+          git config --global url."https://oauth2:${GH_APP_TOKEN}@github.com/".insteadOf "https://github.com/"
+
+      - name: 🔧 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ inputs.python_version }}"
+
+      - name: 🗄️ Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles(steps.prepare-requirements.outputs.PROCESSED_REQUIREMENTS_FILE) }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: 📦 Install Development Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: 📦 Install Runtime Dependencies
+        run: |
+          pip install -r ${{ steps.prepare-requirements.outputs.PROCESSED_REQUIREMENTS_FILE }}
+
+      - name: 📝 Code Formatting Check (Ruff)
+        run: |
+          echo "Checking code formatting..."
+          ruff format --check ${{ inputs.project_name }}/ tests/
+        continue-on-error: false
+
+      - name: 🔎 Code Linting (Ruff)
+        run: |
+          echo "Running linting checks..."
+          ruff check ${{ inputs.project_name }}/ tests/
+        continue-on-error: false
+
+      - name: 🏷️ Type Checking (mypy)
+        run: |
+          echo "Running type checks..."
+          mypy ${{ inputs.project_name }}/
+        continue-on-error: true
+
+      - name: 🔒 Security Analysis (Bandit)
+        run: |
+          echo "Running security analysis..."
+          bandit -r ${{ inputs.project_name }}/ -ll -q
+        continue-on-error: true
+
+      - name: 🧪 Run Tests with Pytest
+        run: |
+          pytest tests --junitxml=pytest.xml --cov=${{ inputs.project_name }} --cov-report=xml --cov-report=term
+
+      - name: Get branch name
+        id: branch_name
+        run: |
+          # Obtém o nome da branch da PR
+          BRANCH_NAME=${GITHUB_HEAD_REF}
+          echo "Branch da PR: $BRANCH_NAME"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Determine next version
+        id: next_version
+        run: |
+          BRANCH_NAME=${{ steps.branch_name.outputs.branch_name }}
+
+          # Baixa todas as tags
+          git fetch --tags
+
+          # Pega a última tag sem filtro
+          LAST_TAG=$(git tag --sort=-v:refname | head -n1)
+          echo "Última tag encontrada: $LAST_TAG"
+
+          # Se não houver tags, assume 0.0.0
+          if [ -z "$LAST_TAG" ]; then
+            LAST_TAG="0.0.0"
+          fi
+
+          # Extrai major, minor, patch
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$LAST_TAG"
+
+          echo "Versão atual: $MAJOR.$MINOR.$PATCH"
+
+          # Incrementa conforme tipo de branch
+          if [[ "$BRANCH_NAME" == release/* ]]; then
+            NEW_MAJOR=$((MAJOR + 1))
+            NEW_MINOR=0
+            NEW_PATCH=0
+          elif [[ "$BRANCH_NAME" == feature/* ]]; then
+            NEW_MAJOR=$MAJOR
+            NEW_MINOR=$((MINOR + 1))
+            NEW_PATCH=0
+          elif [[ "$BRANCH_NAME" == fix/* ]]; then
+            NEW_MAJOR=$MAJOR
+            NEW_MINOR=$MINOR
+            NEW_PATCH=$((PATCH + 1))
+          elif [[ "$BRANCH_NAME" == "main" ]]; then
+            NEW_MAJOR=$MAJOR
+            NEW_MINOR=$MINOR
+            NEW_PATCH=$PATCH
+          else
+            echo "Tipo de branch desconhecido. Abortando."
+            exit 1
+          fi
+
+          NEXT_VERSION="${NEW_MAJOR}.${NEW_MINOR}.${NEW_PATCH}"
+          VERSION=$NEXT_VERSION
+          echo "Nova versão calculada: $NEXT_VERSION"
+
+          echo "version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+
+    
+      - name: Run SonarQube Analysis
+        uses: SonarSource/sonarqube-scan-action@v5
+        with:
+          args: >
+            -Dsonar.projectVersion=$VERSION
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
